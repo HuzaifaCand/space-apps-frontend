@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getLocal, setLocal } from "../utils/storage";
+import { getLocal, setLocal } from "@/utils/storage";
 import { toast } from "sonner";
-import { SelPoint } from "../page";
+import { SelPoint } from "@/app/page";
 import Stars from "@/components/Stars";
 
 export default function Posting() {

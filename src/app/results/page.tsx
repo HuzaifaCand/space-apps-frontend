@@ -4,7 +4,7 @@ import Stars from "@/components/Stars";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import WeatherCard from "@/components/results/WeatherCard";
-import { getLocal } from "../utils/storage";
+import { getLocal } from "@/utils/storage";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 type tabs = "Summary" | "Recommendation" | "Data";

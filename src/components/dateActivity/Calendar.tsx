@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { setLocal, getLocal } from "@utils/storage";
+import { setLocal, getLocal } from "@/utils/storage";
 
 export default function Calendar() {
   const [selected, setSelected] = useState<Date | undefined>();

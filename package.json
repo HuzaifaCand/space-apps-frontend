@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack -p 5000",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"
@@ -11,8 +11,10 @@
   "dependencies": {
     "@iconify/react": "^6.0.2",
     "@tailwindcss/postcss": "^4.1.14",
+    "clsx": "^2.1.1",
     "country-state-city": "^3.2.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
     "mapbox-gl": "^3.15.0",
     "next": "15.5.4",
