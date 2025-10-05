@@ -60,6 +60,7 @@ export default function Calendar({ onSave }: Props) {
           mode="single"
           selected={selected}
           onSelect={handleDateSelect}
+          startMonth={new Date(2025, 0, 1)} // restrict to Jan 1, 2025 and onwards
           className="custom-day-picker"
           styles={{
             caption: {

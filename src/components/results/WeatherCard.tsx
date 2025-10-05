@@ -10,6 +10,7 @@ import {
   AlertTriangle,
   Cloud,
   Flower,
+  TriangleAlertIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
@@ -56,7 +57,7 @@ const statusIcons: Record<string, React.JSX.Element> = {
 
   // Heat Index
   Safe: <ShieldCheck size={56} className="text-white" />,
-  Caution: <ShieldCheck size={56} className="text-yellow-300" />,
+  Caution: <TriangleAlertIcon size={56} className="text-yellow-300" />,
   "Extreme Caution": <AlertTriangle size={56} className="text-orange-400" />,
   Danger: <AlertTriangle size={56} className="text-white" />,
   "Extreme Danger": <AlertTriangle size={56} className="text-white" />,

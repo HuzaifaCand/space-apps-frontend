@@ -1,22 +1,23 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-const testPayload = {
-  activities: ["Hiking", "Cycling"],
-  data: { temperature: 30, humidity: 80 },
-  details: { duration: "2 hours" },
-};
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+});
 
 export async function POST(req: Request) {
   try {
-    // const body = await req.json();
-    // console.log(body);
-    // const { activities, data, details } = body;
+    const body = await req.json();
+    const { activities, data, details } = body;
 
-    // Properly stringify inputs
-    const userContent = testPayload;
+    if (!activities || !data || !details) {
+      return NextResponse.json(
+        { message: "Missing required fields: activities, data, or details." },
+        { status: 400 }
+      );
+    }
+
+    const userContent = { activities, data, details };
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
@@ -31,17 +32,19 @@ export async function POST(req: Request) {
           content: JSON.stringify(userContent),
         },
       ],
+      temperature: 0.7,
+      max_tokens: 400,
     });
 
-    return NextResponse.json({
-      message:
-        response.choices?.[0]?.message?.content ||
-        "No recommendation generated.",
-    });
-  } catch (error) {
-    console.error(error);
+    const message =
+      response.choices?.[0]?.message?.content?.trim() ||
+      "No recommendation generated.";
+
+    return NextResponse.json({ message });
+  } catch (error: any) {
+    console.error("Recommendation API error:", error);
     return NextResponse.json(
-      { message: "Error generating recommendation" },
+      { message: "Error generating recommendation." },
       { status: 500 }
     );
   }

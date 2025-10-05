@@ -4,12 +4,13 @@ import Stars from "@/components/Stars";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import WeatherCard from "@/components/results/WeatherCard";
-import { getLocal } from "@/utils/storage";
+import { getLocal, setLocal } from "@/utils/storage";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import FinalPage from "@/components/results/FinalPage";
 import DownloadButton from "@/components/results/DownloadButton";
 import { InfoIcon } from "lucide-react";
+import RecommendationPage from "@/components/results/RecommendationPage";
 type tabs = "Summary" | "Recommendation" | "Data";
 
 const tabsList = ["Summary", "Recommendation", "Data"] as tabs[];
@@ -40,7 +41,6 @@ export default function ResultsPage() {
   const [results, setResults] = useState<WeatherResults>();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabs>("Summary");
-
   useEffect(() => {
     const loadResults = () => {
       const data = getLocal("results");
@@ -57,11 +57,15 @@ export default function ResultsPage() {
         try {
           data.finalStats = JSON.parse(data.finalStats);
           console.log("Parsed finalStats:", data.finalStats);
-          console.log("Please be json", typeof data.finalStats);
         } catch (err) {
           console.error("Failed to parse finalStats:", err);
           return null;
         }
+      }
+
+      if (data?.finalStats?.Predictions) {
+        setLocal("predictions", data.finalStats.Predictions);
+        console.log("Predictions saved to localStorage ✅");
       }
 
       return data;
@@ -188,7 +192,7 @@ export default function ResultsPage() {
               <DownloadButton predictions={predictions} />
             </div>
           )}
-          {/* {activeTab === "Recommendation" && <RecommendationPage />} */}
+          {activeTab === "Recommendation" && <RecommendationPage />}
           {activeTab === "Data" && <FinalPage />}
         </div>
       </section>
