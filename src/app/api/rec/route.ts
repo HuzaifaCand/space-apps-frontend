@@ -32,8 +32,6 @@ export async function POST(req: Request) {
           content: JSON.stringify(userContent),
         },
       ],
-      temperature: 0.7,
-      max_tokens: 400,
     });
 
     const message =
@@ -41,7 +39,7 @@ export async function POST(req: Request) {
       "No recommendation generated.";
 
     return NextResponse.json({ message });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Recommendation API error:", error);
     return NextResponse.json(
       { message: "Error generating recommendation." },
