@@ -72,3 +72,24 @@ body {
 
   pointer-events: none;
 }
+
+@theme {
+  --color-secondary: #172030;
+  --color-background: #0b1018;
+  --color-muted: #5f738e;
+  --color-highlight: #a5d1ff;
+  --color-blueBg: #1a2135;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(18, 38, 40, 1);
+  border-radius: 10px;
+}
