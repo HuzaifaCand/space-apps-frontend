@@ -6,7 +6,11 @@ import { activities } from "@/data/activities";
 import { setLocal, getLocal, removeLocal } from "@/utils/storage";
 import { toast } from "sonner";
 
-export default function ActivitySelector() {
+interface ActivitySelectorProps {
+  onSave?: () => void; // optional callback
+}
+
+export default function ActivitySelector({ onSave }: ActivitySelectorProps) {
   const [saved, setSaved] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [extraActivity, setExtraActivity] = useState("");
@@ -19,16 +23,19 @@ export default function ActivitySelector() {
     const savedActivities = getLocal("activities");
     const savedExtra = getLocal("activities_detail");
 
-    if (Array.isArray(savedActivities)) {
-      setSelected(savedActivities);
-      setSaved(true);
-    }
-
-    if (typeof savedExtra === "string") {
-      setExtraActivity(savedExtra);
-      setSaved(true);
-    }
+    if (Array.isArray(savedActivities)) setSelected(savedActivities);
+    if (typeof savedExtra === "string") setExtraActivity(savedExtra);
+    if (savedActivities || savedExtra) setSaved(true);
   }, []);
+
+  const handleConfirm = () => {
+    setLocal("activities", selected);
+    setLocal("activities_detail", extraActivity.trim());
+    toast.success("Activities saved!");
+    setSaved(true);
+
+    if (onSave) onSave(); // <--- trigger callback
+  };
 
   // --- Clear storage when there’s a change (unsaved edits) ---
   const markUnsaved = useCallback(() => {
@@ -85,14 +92,6 @@ export default function ActivitySelector() {
     [totalPages]
   );
   const prevPage = useCallback(() => setPage((p) => Math.max(p - 1, 0)), []);
-
-  // --- Save to localStorage ---
-  const handleConfirm = () => {
-    setLocal("activities", selected);
-    setLocal("activities_detail", extraActivity.trim());
-    toast.success("Activities saved!");
-    setSaved(true);
-  };
 
   return (
     <div className="bg-background ring ring-blueBg py-8 px-6 rounded-2xl relative h-full">

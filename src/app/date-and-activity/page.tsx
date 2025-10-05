@@ -1,111 +1,85 @@
 "use client";
 
+import Stars from "@/components/Stars";
+import ActivitySelector from "@/components/dateActivity/ActivitySelector";
+import Calendar from "@/components/dateActivity/Calendar";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { DayPicker } from "react-day-picker";
-import { format } from "date-fns";
 import { toast } from "sonner";
-import { setLocal, getLocal } from "@/utils/storage";
 
-export default function Calendar() {
-  const [selected, setSelected] = useState<Date | undefined>();
-  const [saved, setSaved] = useState(false);
+export default function DateActivityPage() {
+  const [isChecking, setIsChecking] = useState(true);
+  const [canContinue, setCanContinue] = useState(false);
+  const router = useRouter();
 
-  // --- Load saved date on mount ---
-  useEffect(() => {
-    const savedDate = getLocal("date");
-    if (savedDate) {
-      try {
-        const parsed = new Date(savedDate);
-        if (!isNaN(parsed.getTime())) {
-          setSelected(parsed);
-          setSaved(true);
-        }
-      } catch {
-        console.error("Invalid date in localStorage");
-      }
+  // --- Function to check if we can continue ---
+  const updateCanContinue = () => {
+    const date = localStorage.getItem("date");
+    const activities = localStorage.getItem("activities");
+    try {
+      const parsedActivities = activities ? JSON.parse(activities) : [];
+      setCanContinue(!!date && parsedActivities.length > 0);
+    } catch {
+      setCanContinue(false);
     }
-  }, []);
-
-  // --- Handle date change ---
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelected(date);
-    setSaved(false); // mark unsaved on change
-    if (date) localStorage.removeItem("date"); // clear old saved date
   };
 
-  // --- Handle saving ---
-  const handleConfirm = () => {
-    if (!selected) return;
-    setLocal("date", selected.toISOString());
-    toast.success("Date saved!");
-    setSaved(true);
+  // --- Check for coordinates, date, and activities on mount ---
+  useEffect(() => {
+    const coords = localStorage.getItem("coordinates");
+    if (!coords) {
+      toast.error("Please enter your location first");
+      router.replace("/");
+      return;
+    }
+
+    updateCanContinue();
+    setIsChecking(false);
+  }, [router]);
+
+  const handleContinue = () => {
+    if (!canContinue) return;
+    router.replace("/analyzing");
   };
+
+  if (isChecking) {
+    return (
+      <section>
+        <Stars />
+      </section>
+    );
+  }
 
   return (
-    <div className="bg-background relative ring ring-blueBg py-8 px-6 rounded-2xl shadow-lg flex flex-col justify-between h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4 px-2">
-        <h2 className="text-highlight font-semibold text-lg sm:text-xl">
-          Select your date
-        </h2>
-      </div>
+    <>
+      <Stars />
+      <section className="max-w-7xl flex flex-col gap-4 justify-center py-12 md:py-24 px-8 mx-auto">
+        <div className="flex flex-col md:flex-row gap-4 md:items-stretch">
+          <div className="md:w-1/3 w-full">
+            {/* Pass callback to update canContinue after saving */}
+            <Calendar onSave={updateCanContinue} />
+          </div>
+          <div className="md:w-2/3 w-full">
+            <ActivitySelector onSave={updateCanContinue} />
+          </div>
+        </div>
 
-      {/* Calendar */}
-      <div className="flex px-3">
-        <DayPicker
-          mode="single"
-          selected={selected}
-          onSelect={handleDateSelect}
-          className="custom-day-picker"
-          styles={{
-            caption: {
-              fontSize: "1.2rem",
-              fontWeight: "600",
-              textAlign: "center",
-              marginBottom: "0.75rem",
-            },
-            head_cell: {
-              textTransform: "uppercase",
-              fontSize: "0.85rem",
-              fontWeight: "500",
-              textAlign: "center",
-            },
-            day: {
-              fontSize: "1rem",
-              borderRadius: "2rem",
-              transition: "all 0.2s ease-in-out",
-            },
-          }}
-        />
-      </div>
-
-      {/* Selected date */}
-      {selected && (
-        <p className="text-left text-blue-100 mt-6 px-4 text-sm sm:text-base">
-          You selected:{" "}
-          <span className="font-semibold text-blue-300">
-            {format(selected, "PPP")}
-          </span>
-        </p>
-      )}
-
-      {/* Confirm Button */}
-      <div className="w-full  mt-6 md:mt-12 px-4">
-        <button
-          onClick={handleConfirm}
-          disabled={!selected}
-          className={`w-full py-2.5 rounded-md text-sm font-medium transition-all
+        {/* Continue Button */}
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={handleContinue}
+            disabled={!canContinue}
+            className={`w-full py-3 px-6 md:px-0 rounded-md text-sm font-semibold transition
             ${
-              !selected
-                ? "bg-gray-700 text-gray-400 cursor-not-allowed"
-                : saved
-                ? "bg-blue-500 text-white"
-                : "bg-blue-700 hover:bg-blue-600 text-white"
+              canContinue
+                ? "bg-blue-700 hover:bg-blue-600 text-white shadow-md"
+                : "bg-gray-700 text-gray-400 cursor-not-allowed"
             }`}
-        >
-          {saved ? "Saved" : "Save"}
-        </button>
-      </div>
-    </div>
+          >
+            Continue
+          </button>
+        </div>
+      </section>
+    </>
   );
 }

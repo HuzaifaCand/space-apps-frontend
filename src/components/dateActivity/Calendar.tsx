@@ -6,7 +6,10 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { setLocal, getLocal } from "@/utils/storage";
 
-export default function Calendar() {
+interface Props {
+  onSave: () => void;
+}
+export default function Calendar({ onSave }: Props) {
   const [selected, setSelected] = useState<Date | undefined>();
   const [saved, setSaved] = useState(false);
 
@@ -26,19 +29,20 @@ export default function Calendar() {
     }
   }, []);
 
-  // --- Handle date change ---
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelected(date);
-    setSaved(false); // mark unsaved on change
-    if (date) localStorage.removeItem("date"); // clear old saved date
-  };
-
-  // --- Handle saving ---
   const handleConfirm = () => {
     if (!selected) return;
     setLocal("date", selected.toISOString());
     toast.success("Date saved!");
     setSaved(true);
+
+    if (onSave) onSave(); // <--- trigger callback
+  };
+
+  // --- Handle date change ---
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelected(date);
+    setSaved(false); // mark unsaved on change
+    if (date) localStorage.removeItem("date"); // clear old saved date
   };
 
   return (
