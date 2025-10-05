@@ -65,7 +65,7 @@ export default function DateActivityPage() {
         </div>
 
         {/* Continue Button */}
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center px-6 mt-4">
           <button
             onClick={handleContinue}
             disabled={!canContinue}

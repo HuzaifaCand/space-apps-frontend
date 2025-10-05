@@ -8,6 +8,8 @@ import { getLocal } from "@/utils/storage";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import FinalPage from "@/components/results/FinalPage";
+import DownloadButton from "@/components/results/DownloadButton";
+import { InfoIcon } from "lucide-react";
 type tabs = "Summary" | "Recommendation" | "Data";
 
 const tabsList = ["Summary", "Recommendation", "Data"] as tabs[];
@@ -33,6 +35,8 @@ export interface WeatherResults {
 }
 
 export default function ResultsPage() {
+  const [city, setCity] = useState<string>();
+  const [date, setDate] = useState<string>();
   const [results, setResults] = useState<WeatherResults>();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabs>("Summary");
@@ -67,6 +71,22 @@ export default function ResultsPage() {
     if (storedData) setResults(storedData);
   }, [router]);
 
+  useEffect(() => {
+    const loadDetails = () => {
+      const city = getLocal("city");
+      const date = getLocal("date");
+
+      return { city, date };
+    };
+
+    const inputDetails = loadDetails();
+    if (inputDetails) {
+      const { city, date } = loadDetails(); // destructure here
+      if (city) setCity(city);
+      if (date) setDate(date.toISOString);
+    }
+  });
+
   if (!results) return null;
 
   const predictions = results.finalStats.Predictions;
@@ -80,7 +100,7 @@ export default function ResultsPage() {
     <>
       <Stars />
       <section className="flex flex-col gap-4 max-w-7xl mx-auto py-12 px-4">
-        <div className=" w-full pb-2 pt-3 rounded-t-2xl px-6 no-scrollbar overflow-x-auto bg-background/80">
+        <div className=" w-full pb-2 pt-3 rounded-t-2xl text-xs sm:text-sm px-8 no-scrollbar overflow-x-auto bg-background/80">
           <div className="flex gap-6 sm:gap-10 whitespace-nowrap">
             {tabsList.map((t) => {
               return (
@@ -105,34 +125,64 @@ export default function ResultsPage() {
 
         <div className="w-full py-12 bg-background/80 min-h-120 px-12 rounded-b-2xl">
           {activeTab === "Summary" && (
-            <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
-              <WeatherCard
-                title="Temperature"
-                status={predictions.Temperature.Status}
-                probability={predictions.Temperature.Probability}
-              />
-              <WeatherCard
-                title="Humidity"
-                status={predictions.Relative_Humidity.Status}
-                probability={predictions.Heat_Index.Probability}
-              />
-              <WeatherCard
-                title="Rainfall"
-                status={predictions.Precipitation.Status}
-                probability={predictions.Precipitation.Probability}
-              />
-              <WeatherCard
-                title="Wind Speed"
-                status={predictions.Wind_Speed.Status}
-                probability={predictions.Wind_Speed.Probability}
-              />
-              {showHeatIndex && (
+            <div className="flex flex-col gap-4">
+              <div className="text-left mb-2">
+                <h2 className="text-white font-semibold text-xl sm:text-2xl">
+                  Results near{" "}
+                  <span className="text-highlight">
+                    {city || "your selected city"}
+                  </span>{" "}
+                  on{" "}
+                  <span className="text-highlight">
+                    {date || "your selected date"}
+                  </span>
+                </h2>
+              </div>
+              <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
                 <WeatherCard
-                  title="Heat Index"
-                  status={predictions.Heat_Index.Status}
+                  title="Temperature"
+                  status={predictions.Temperature.Status}
+                  probability={predictions.Temperature.Probability}
+                />
+                <WeatherCard
+                  title="Humidity"
+                  status={predictions.Relative_Humidity.Status}
                   probability={predictions.Heat_Index.Probability}
                 />
-              )}
+                <WeatherCard
+                  title="Rainfall"
+                  status={predictions.Precipitation.Status}
+                  probability={predictions.Precipitation.Probability}
+                />
+                <WeatherCard
+                  title="Wind Speed"
+                  status={predictions.Wind_Speed.Status}
+                  probability={predictions.Wind_Speed.Probability}
+                />
+                {showHeatIndex && (
+                  <WeatherCard
+                    title="Heat Index"
+                    status={predictions.Heat_Index.Status}
+                    probability={predictions.Heat_Index.Probability}
+                  />
+                )}
+                <div className="relative rounded-3xl p-6 sm:p-8 text-center text-white flex flex-col items-center justify-start bg-bg-background border-2 border-blue-500/50">
+                  <div className="mb-4 mt-2">
+                    <InfoIcon size={48} className="text-blue-400/80" />
+                  </div>
+                  <h3 className="text-sm sm:text-md uppercase tracking-wide font-medium opacity-70 mb-2">
+                    About These Cards
+                  </h3>
+                  <p className="text-center text-[10px] sm:text-xs text-muted leading-snug max-w-[220px] mx-auto">
+                    Each card shows a weather condition with its likely status
+                    based on historical trends. The probability shows how often
+                    this condition has occurred on this date over the years. Use
+                    this to understand typical patterns and see what’s most
+                    likely on this day.
+                  </p>
+                </div>
+              </div>
+              <DownloadButton predictions={predictions} />
             </div>
           )}
           {/* {activeTab === "Recommendation" && <RecommendationPage />} */}

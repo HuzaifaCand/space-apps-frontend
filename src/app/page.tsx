@@ -57,7 +57,10 @@ export default function Home() {
                 onMark={(event) => setSelectedPoint(event?.lngLat ?? null)}
               />
             </div>
-            <ContinueButton selectedPoint={selectedPoint} />
+            <ContinueButton
+              selectedPoint={selectedPoint}
+              selectedCity={selectedCity}
+            />
           </div>
         </div>
       </div>

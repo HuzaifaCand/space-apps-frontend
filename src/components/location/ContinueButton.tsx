@@ -6,14 +6,18 @@ import { toast } from "sonner";
 
 interface Props {
   selectedPoint: SelPoint;
+  selectedCity: string | null;
 }
 
-export default function ContinueButton({ selectedPoint }: Props) {
+export default function ContinueButton({ selectedPoint, selectedCity }: Props) {
   const router = useRouter();
 
   const handleContinue = () => {
     if (selectedPoint) {
       setLocal("coordinates", selectedPoint);
+      if (selectedCity) {
+        setLocal("city", selectedCity);
+      }
       router.replace("/date-and-activity");
       toast.success("Coordinates saved!");
     }
