@@ -1,5 +1,5 @@
 import { SelPoint } from "@/app/page";
-import { setLocal } from "@/app/utils/storage";
+import { setLocal } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";

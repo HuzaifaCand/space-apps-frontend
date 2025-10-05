@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Icon } from "@iconify/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { activities } from "@/data/activities";
-import { setLocal, getLocal, removeLocal } from "@/app/utils/storage";
+import { setLocal, getLocal, removeLocal } from "@/utils/storage";
 import { toast } from "sonner";
 
 export default function ActivitySelector() {
