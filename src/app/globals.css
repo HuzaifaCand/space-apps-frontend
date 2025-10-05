@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "mapbox-gl/dist/mapbox-gl.css";
+@import "react-day-picker/dist/style.css";
 
 body {
   margin: 0;
@@ -93,4 +94,43 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(18, 38, 40, 1);
   border-radius: 10px;
+}
+
+.custom-day-picker {
+  --rdp-accent-color: #3b82f6;
+  --rdp-background-color: transparent;
+  --rdp-outline: none;
+  --rdp-cell-size: 2.2rem;
+  --rdp-selected-color: #ffffff;
+  --rdp-selected-bg: #3b82f6;
+  --rdp-today-border: 1px solid #60a5fa;
+  --rdp-color: #e2e8f0;
+  --rdp-weekday-color: #a5b4fc;
+  color: var(--rdp-color);
+}
+
+@media (max-width: 640px) {
+  .custom-day-picker {
+    --rdp-cell-size: 1.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+.custom-day-picker .rdp-caption_label {
+  color: #dbeafe !important;
+}
+
+.custom-day-picker .rdp-day:hover:not(.rdp-day_selected) {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+.custom-day-picker .rdp-day_selected {
+  background-color: #3b82f6 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.custom-day-picker .rdp-day_today {
+  border: 1px solid #60a5fa !important;
+  color: #93c5fd !important;
 }
