@@ -50,28 +50,26 @@ export default function RecommendationPage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center text-center min-h-[300px] text-white">
+    <div className="flex flex-col w-full p-4 text-left text-white">
       {loading ? (
-        <div className="flex flex-col items-center gap-3 animate-pulse">
-          <Loader2 className="w-6 h-6 animate-spin text-highlight" />
+        <div className="flex items-center gap-2 animate-pulse">
+          <Loader2 className="w-5 h-5 animate-spin text-highlight" />
           <p className="text-sm text-muted">
             Generating your recommendation...
           </p>
         </div>
       ) : recommendation ? (
-        <div className="bg-background/70 border border-highlight/30 p-6 rounded-2xl max-w-2xl shadow-md">
-          <div className="flex items-center justify-center mb-3 gap-2">
+        <div className="bg-background/60 border border-highlight/30 p-6 rounded-2xl shadow-md">
+          <div className="flex items-center mb-4 gap-2">
             <Brain className="w-5 h-5 text-highlight" />
-            <div className="flex flex-col-1">
-              <h2 className="font-semibold text-lg text-highlight">
-                AI Recommendation
-              </h2>
-              <p className="text-muted">
-                Assessment for your activity on your chosen date based on the
-                calculated data
-              </p>
-            </div>
+            <h2 className="font-semibold text-lg text-highlight">
+              AI Recommendation
+            </h2>
           </div>
+          <p className="text-muted mb-3">
+            Assessment for your activity on your chosen date based on the
+            calculated data.
+          </p>
           <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
             {recommendation}
           </p>

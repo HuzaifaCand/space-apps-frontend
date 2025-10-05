@@ -32,6 +32,8 @@ export async function POST(req: Request) {
           content: JSON.stringify(userContent),
         },
       ],
+      temperature: 0.7,
+      max_tokens: 400,
     });
 
     const message =
