@@ -74,16 +74,22 @@ export default function ResultsPage() {
   useEffect(() => {
     const loadDetails = () => {
       const city = getLocal("city");
-      const date = getLocal("date");
+      const dateStr = getLocal("date");
 
-      return { city, date };
+      return { city, dateStr };
     };
 
-    const inputDetails = loadDetails();
-    if (inputDetails) {
-      const { city, date } = loadDetails(); // destructure here
-      if (city) setCity(city);
-      if (date) setDate(date.toISOString);
+    const { city, dateStr } = loadDetails();
+    if (city) setCity(city);
+    if (dateStr) {
+      const parsedDate = new Date(dateStr);
+      // Format date like "October 5, 2025"
+      const formattedDate = parsedDate.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      setDate(formattedDate);
     }
   });
 
@@ -132,10 +138,7 @@ export default function ResultsPage() {
                   <span className="text-highlight">
                     {city || "your selected city"}
                   </span>{" "}
-                  on{" "}
-                  <span className="text-highlight">
-                    {date || "your selected date"}
-                  </span>
+                  on <span className="text-highlight">{date}</span>
                 </h2>
               </div>
               <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
