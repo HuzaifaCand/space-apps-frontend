@@ -104,7 +104,7 @@ export default function ResultsPage() {
 
         <div className="w-full py-12 bg-background/80 min-h-120 px-12 rounded-b-2xl">
           {activeTab === "Summary" && (
-            <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(250px,1fr))]">
+            <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
               <WeatherCard
                 title="Temperature"
                 status={predictions.Temperature.Status}
