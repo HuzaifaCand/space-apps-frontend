@@ -7,6 +7,7 @@ import WeatherCard from "@/components/results/WeatherCard";
 import { getLocal } from "@/utils/storage";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import FinalPage from "@/components/results/FinalPage";
 type tabs = "Summary" | "Recommendation" | "Data";
 
 const tabsList = ["Summary", "Recommendation", "Data"] as tabs[];
@@ -135,6 +136,7 @@ export default function ResultsPage() {
             </div>
           )}
           {/* {activeTab === "Recommendation" && <RecommendationPage />} */}
+          {activeTab === "Data" && <FinalPage />}
         </div>
       </section>
     </>

@@ -86,7 +86,9 @@ export default function Posting() {
         {loading ? (
           <div className="flex flex-col items-center gap-3">
             <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm text-gray-300">Fetching your data...</p>
+            <p className="text-sm text-gray-300">
+              Fetching your data and calculating...
+            </p>
           </div>
         ) : (
           <p className="text-sm text-gray-400">Preparing...</p>

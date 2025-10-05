@@ -42,7 +42,7 @@ export default function FinalPage() {
           </p>
         </div>
         <a
-          href="https://web-production-ba201.up.railway.app/yearly_json/download"
+          href="https://web-production-ba201.up.railway.app/yearly_data/download"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-2 sm:mt-0 inline-block px-6 py-2 text-xs sm:text-sm bg-blue-500 hover:bg-blue-600 rounded-lg text-white font-medium transition"
